@@ -1,7 +1,7 @@
 <script context="module">
     export async function preload({ session }) {
         if (session && session.token) {
-            this.redirect(302, '/');
+            this.redirect(302, '/overview');
         }
     }
 
@@ -18,17 +18,17 @@
 
     let username = '';
     let password = '';
-    let error = null;
+    let errors = null;
 
     async function submit(event) {
-        const response = await post(`auth/login`, {username, password});
+        const response = await post(`auth/login`, { username, password });
 
         // TODO handle network errors
-        error = response.error;
+        errors = response.errors;
         console.log('Login response:', response);
         if (response.token) {
             $session.token = response.token;
-            goto('/');
+            goto('/overview');
         }
     }
 </script>
@@ -46,20 +46,16 @@
                     <a href="/register">Need an account?</a>
                 </p>
 
-                {#if error}
-                    <div class="alert alert-danger" role="alert">
-                        <ListErrors {error}/>
-                    </div>
+                {#if errors}
+                    <div class="alert alert-danger" role="alert"><ListErrors {errors}/></div>
                 {/if}
 
                 <form on:submit|preventDefault={submit}>
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="text" required placeholder="Username"
-                               bind:value={username}>
+                        <input class="form-control form-control-lg" type="text" required placeholder="Username" bind:value={username}>
                     </fieldset>
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="password" required placeholder="Password"
-                               bind:value={password}>
+                        <input class="form-control form-control-lg" type="password" required placeholder="Password" bind:value={password}>
                     </fieldset>
                     <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
                         Sign in
