@@ -67,6 +67,7 @@
 		{:else}
 			<li><a rel=prefetch aria-current="{segment === 'login' ? 'page' : undefined}" href="login">log in</a></li>
 			<li><a rel=prefetch aria-current="{segment === 'register' ? 'page' : undefined}" href="register">register</a></li>
+			
 		{/if}
 	</ul>
 </nav>
